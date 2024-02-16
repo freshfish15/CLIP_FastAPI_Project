@@ -1,11 +1,9 @@
 import os
-import aiofiles
 from fastapi import FastAPI, File, UploadFile
 
 import torch
 from PIL import Image
 import open_clip
-from pathlib import Path
 import shutil
 
 app = FastAPI()
