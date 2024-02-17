@@ -44,7 +44,8 @@ async def upload_image(file: UploadFile = File(...)):
     image = preprocess(Image.open(file_path)).unsqueeze(0)
     text = tokenizer(["a diagram", "a dog", "a cat", "a truck"])
 
-    with torch.no_grad(), torch.cuda.amp.autocast(), torch.cpu.amp.autocast():
+    # with torch.no_grad(), torch.cuda.amp.autocast(), torch.cpu.amp.autocast():
+    with torch.no_grad(), torch.cpu.amp.autocast():
         image_features = model.encode_image(image)
         text_features = model.encode_text(text)
         image_features /= image_features.norm(dim=-1, keepdim=True)
