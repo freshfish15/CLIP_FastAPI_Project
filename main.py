@@ -29,11 +29,11 @@ async def say_hello(name: str):
 
 @app.post("/uploadImage")
 async def upload_image(file: UploadFile = File(...)):
-    file_path = os.path.join(UPLOAD_DIRECTORY, file.filename)
-
-    # Open the file in write mode (binary) and save the uploaded file to the filesystem
-    with open(file_path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
+    # file_path = os.path.join(UPLOAD_DIRECTORY, file.filename)
+    #
+    # # Open the file in write mode (binary) and save the uploaded file to the filesystem
+    # with open(file_path, "wb") as buffer:
+    #     shutil.copyfileobj(file.file, buffer)
 
 
     model, _, preprocess = open_clip.create_model_and_transforms('ViT-B-32', pretrained='laion2b_s34b_b79k')
@@ -41,8 +41,8 @@ async def upload_image(file: UploadFile = File(...)):
 
     image_data = file.file.read()
 
-    image = preprocess(Image.open(file_path)).unsqueeze(0)
-    text = tokenizer(["a diagram", "a dog", "a cat", "a truck"])
+    image = preprocess(Image.open("truck_1.png")).unsqueeze(0)
+    text = tokenizer(["a diagram", "a cat", "a truck"])
 
     # with torch.no_grad(), torch.cuda.amp.autocast(), torch.cpu.amp.autocast():
     with torch.no_grad(), torch.cpu.amp.autocast():
