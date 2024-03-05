@@ -4,6 +4,7 @@ import torch
 from PIL import Image
 import base64
 import open_clip
+from io import BytesIO
 import shutil
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
@@ -11,14 +12,13 @@ from starlette.responses import JSONResponse
 
 app = FastAPI()
 
-
 model, _, preprocess = open_clip.create_model_and_transforms('ViT-B-32', pretrained='laion2b_s34b_b79k')
 tokenizer = open_clip.get_tokenizer('ViT-B-32')
+
 
 class ImageText(BaseModel):
     text: str
     imageBase64: str
-
 
 
 # Define the path where you want to store the uploaded files
@@ -41,6 +41,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
@@ -49,6 +50,7 @@ async def root():
 @app.get("/hello/{name}")
 async def say_hello(name: str):
     return {"message": f"Hello {name}"}
+
 
 @app.post("/uploadImage")
 async def upload_image(text: str, file: UploadFile = File(...)):
@@ -81,71 +83,83 @@ async def upload_image(text: str, file: UploadFile = File(...)):
 
             text_probs = (100.0 * image_features @ text_features.T).softmax(dim=-1)
 
-
         probs_list = text_probs.tolist()
         decimal_probs_list = [f"{value:.20f}" for value in probs_list[0]]
 
         combined_dict = dict(zip(string_list, decimal_probs_list))
 
         os.remove(file_path)
-        #return("label: ", string_list, "Label probs:", decimal_probs_list)  # prints: [[1., 0., 0.]]
+        # return("label: ", string_list, "Label probs:", decimal_probs_list)  # prints: [[1., 0., 0.]]
         return JSONResponse(content=combined_dict)
 
     except Exception as e:
         return str(e)
 
+
 @app.post("/uploadImageBase64")
 async def upload_image_base64(imagetext: ImageText):
+    try:
+        filename = "temp.png"
+        # file_path = os.path.join(UPLOAD_DIRECTORY, filename)
 
-        try:
-            filename = "temp.png"
-            # file_path = os.path.join(UPLOAD_DIRECTORY, filename)
-            image_data_frombase64 = base64.urlsafe_b64decode(imagetext.imageBase64)
+        # Add proper padding, if necessary
+        # if len(temp)%3 == 1:
+        #     temp += "=="
+        # elif len(temp)%3 == 2:
+        #     temp += "="
 
-            # Open the file in write mode (binary) and save the uploaded file to the filesystem
+        # image_data_frombase64 = base64.decodebytes(imagetext.imageBase64)
 
-            #
-            # with open(file_path, "wb") as buffer:
-            #     shutil.copyfileobj(image_data_frombase64, buffer)
+        # Open the file in write mode (binary) and save the uploaded file to the filesystem
 
-            with open('output_image.png', 'wb') as file:
-                file.write(image_data_frombase64)
+        #
+        # with open(file_path, "wb") as buffer:
+        #     shutil.copyfileobj(image_data_frombase64, buffer)
+        byte_data = base64.b64decode(imagetext.imageBase64)
+        image_data = BytesIO(byte_data)
+        img = Image.open(image_data)
+        image_path = './output_image.png'
+        if image_path:
+            img.save(image_path)
+        # with open('output_image.png', 'wb') as file:
+        #     file.write(base64.decodex(imagetext.imageBase64))
 
-            file_path = os.path.join(UPLOAD_DIRECTORY, 'output_image.png')
+        file_path = os.path.join(UPLOAD_DIRECTORY, 'output_image.png')
 
-            # Split the input string by comma into a list of strings
-            string_list = imagetext.text.split(',')
+        # Split the input string by comma into a list of strings
+        string_list = imagetext.text.split(',')
 
-            model, _, preprocess = open_clip.create_model_and_transforms('ViT-B-32', pretrained='laion2b_s34b_b79k')
-            tokenizer = open_clip.get_tokenizer('ViT-B-32')
+        model, _, preprocess = open_clip.create_model_and_transforms('ViT-B-32', pretrained='laion2b_s34b_b79k')
+        tokenizer = open_clip.get_tokenizer('ViT-B-32')
 
-            # image_data = image_data_frombase64.read()
+        # image_data = image_data_frombase64.read()
 
-            image = preprocess(Image.open(file_path)).unsqueeze(0)
-            # text = tokenizer(["a diagram", "a cat", "a truck"])
-            text = tokenizer(string_list)
+        image = preprocess(Image.open(image_path)).unsqueeze(0)
+        # text = tokenizer(["a diagram", "a cat", "a truck"])
+        text = tokenizer(string_list)
 
-            # with torch.no_grad(), torch.cuda.amp.autocast(), torch.cpu.amp.autocast():
+        # with torch.no_grad(), torch.cuda.amp.autocast(), torch.cpu.amp.autocast():
 
-            with torch.no_grad():
-                image_features = model.encode_image(image)
-                text_features = model.encode_text(text)
-                image_features /= image_features.norm(dim=-1, keepdim=True)
-                text_features /= text_features.norm(dim=-1, keepdim=True)
+        with torch.no_grad():
+            image_features = model.encode_image(image)
+            text_features = model.encode_text(text)
+            image_features /= image_features.norm(dim=-1, keepdim=True)
+            text_features /= text_features.norm(dim=-1, keepdim=True)
 
-                text_probs = (100.0 * image_features @ text_features.T).softmax(dim=-1)
+            text_probs = (100.0 * image_features @ text_features.T).softmax(dim=-1)
 
-            probs_list = text_probs.tolist()
-            decimal_probs_list = [f"{value:.20f}" for value in probs_list[0]]
+        probs_list = text_probs.tolist()
+        decimal_probs_list = [f"{value:.20f}" for value in probs_list[0]]
 
-            combined_dict = dict(zip(string_list, decimal_probs_list))
+        combined_dict = dict(zip(string_list, decimal_probs_list))
 
-            # os.remove(file_path)
-            # return("label: ", string_list, "Label probs:", decimal_probs_list)  # prints: [[1., 0., 0.]]
-            return JSONResponse(content=combined_dict)
+        # os.remove(file_path)
+        # return("label: ", string_list, "Label probs:", decimal_probs_list)  # prints: [[1., 0., 0.]]
+        return JSONResponse(content=combined_dict)
 
-        except Exception as e:
-            return str(e)
+    except Exception as e:
+        return str(e)
+
 
 def decode_base64(data):
     # Check if there is padding

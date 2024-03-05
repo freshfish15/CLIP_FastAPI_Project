@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3c0fc667-dd73-434b-a923-ad4c01ebb82e" name="Changes" comment="update to cpu-only version">
-      <change beforePath="$PROJECT_DIR$/.idea/fastApiProject1.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/fastApiProject1.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="3c0fc667-dd73-434b-a923-ad4c01ebb82e" name="Changes" comment="update to base64 and CORS">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
@@ -147,7 +145,12 @@
       <workItem from="1708085934238" duration="345000" />
       <workItem from="1708158827068" duration="2377000" />
       <workItem from="1708506533562" duration="2944000" />
-      <workItem from="1708519460295" duration="28000" />
+      <workItem from="1708519460295" duration="1300000" />
+      <workItem from="1709605713043" duration="2442000" />
+      <workItem from="1709624872455" duration="844000" />
+      <workItem from="1709625747974" duration="100000" />
+      <workItem from="1709625899546" duration="32000" />
+      <workItem from="1709626038710" duration="1068000" />
     </task>
     <task id="LOCAL-00001" summary="initialize">
       <option name="closed" value="true" />
@@ -181,7 +184,14 @@
       <option name="project" value="LOCAL" />
       <updated>1708159943959</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="update to base64 and CORS">
+      <created>1708519606149</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1708519606149</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -202,10 +212,11 @@
     <MESSAGE value="initialize" />
     <MESSAGE value="update" />
     <MESSAGE value="update to cpu-only version" />
-    <option name="LAST_COMMIT_MESSAGE" value="update to cpu-only version" />
+    <MESSAGE value="update to base64 and CORS" />
+    <option name="LAST_COMMIT_MESSAGE" value="update to base64 and CORS" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/CLIP_FastAPI_Project$fastApiProject1.coverage" NAME="fastApiProject1 Coverage Results" MODIFIED="1708508915158" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/CLIP_FastAPI_Project$fastApiProject1.coverage" NAME="fastApiProject1 Coverage Results" MODIFIED="1709627656508" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/fastApiProject1$test_clip.coverage" NAME="test_clip Coverage Results" MODIFIED="1707823400450" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/fastApiProject1$fastApiProject1.coverage" NAME="fastApiProject1 Coverage Results" MODIFIED="1708180862976" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
   </component>
