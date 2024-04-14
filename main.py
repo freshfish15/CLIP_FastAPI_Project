@@ -85,13 +85,15 @@ async def upload_image(text: str, file: UploadFile = File(...)):
 
         probs_list = text_probs.tolist()
         decimal_probs_list = [f"{value:.20f}" for value in probs_list[0]]
-
+        max_prob = max(decimal_probs_list)
+        max_index = int(decimal_probs_list.index(max_prob))
+        max_text = string_list[max_index]
         combined_dict = dict(zip(string_list, decimal_probs_list))
 
         os.remove(file_path)
         # return("label: ", string_list, "Label probs:", decimal_probs_list)  # prints: [[1., 0., 0.]]
-        return JSONResponse(content=combined_dict)
-
+        # return JSONResponse(content=combined_dict)
+        return max_text
     except Exception as e:
         return str(e)
 
@@ -150,12 +152,14 @@ async def upload_image_base64(imagetext: ImageText):
 
         probs_list = text_probs.tolist()
         decimal_probs_list = [f"{value:.20f}" for value in probs_list[0]]
-
+        max_prob = max(decimal_probs_list)
+        max_index = int(decimal_probs_list.index(max_prob))
+        max_text = string_list[max_index]
         combined_dict = dict(zip(string_list, decimal_probs_list))
 
         # os.remove(file_path)
         # return("label: ", string_list, "Label probs:", decimal_probs_list)  # prints: [[1., 0., 0.]]
-        return JSONResponse(content=combined_dict)
+        return max_text
 
     except Exception as e:
         return str(e)
