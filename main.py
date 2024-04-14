@@ -93,8 +93,7 @@ async def upload_image(text: str, file: UploadFile = File(...)):
 
         os.remove(file_path)
         # return("label: ", string_list, "Label probs:", decimal_probs_list)  # prints: [[1., 0., 0.]]
-        # return JSONResponse(content=combined_dict)
-        return max_text
+        return JSONResponse(content=combined_dict)
     except Exception as e:
         return str(e)
 
